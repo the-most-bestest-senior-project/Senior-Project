@@ -1,9 +1,9 @@
 variable "instance_type" {
-    default = "t2.micro"
+    default = "g2.2xlarge"
 }
 
 variable "ami" {
-    default = "ami-2757f631"
+    default = "ami-017dbf6a"
 }
 
 variable "region" {
@@ -11,5 +11,5 @@ variable "region" {
 }
 
 variable "latest_snapshot" {
-    default = ""
+    default = "snap-07672819ca1b5b04c"
 }
