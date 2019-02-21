@@ -57,7 +57,7 @@ resource "aws_db_instance" "default" {
   engine_version       = "8.0.13"
   instance_class       = "db.t2.micro"
   name                 = "newdb"
-  username             = "masterUsername"
-  password             = "testdbpassword1"
+  username             = ""
+  password             = ""
   parameter_group_name = "default.mysql8.0"
 }
