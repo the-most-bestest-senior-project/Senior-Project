@@ -15,7 +15,6 @@ This repo contains all the scripts and files needed to run your own gaming rig i
   ```
   $ terrform init
   $ terraform apply
-
   ```
 
       
