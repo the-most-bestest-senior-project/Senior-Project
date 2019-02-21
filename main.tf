@@ -49,3 +49,15 @@ resource "aws_volume_attachment" "ebs_volume_attachment" {
   instance_id = "${aws_instance.test.id}"
   force_detach = true
 }
+
+resource "aws_db_instance" "default" {
+  allocated_storage    = 20
+  storage_type         = "gp2"
+  engine               = "mysql"
+  engine_version       = "8.0.13"
+  instance_class       = "db.t2.micro"
+  name                 = "newdb"
+  username             = "masterUsername"
+  password             = "testdbpassword1"
+  parameter_group_name = "default.mysql8.0"
+}
