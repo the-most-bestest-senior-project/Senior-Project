@@ -60,5 +60,7 @@ resource "aws_db_instance" "default" {
   username             = "${var.db_username}"
   password             = "${var.db_password}"
   parameter_group_name = "${var.db_parameter_group_name}"
+	skip_final_snapshot = true
 	final_snapshot_identifier = true
+	publicly_accessible = true;
 }
