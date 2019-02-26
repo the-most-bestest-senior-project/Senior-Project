@@ -12,11 +12,11 @@ data "aws_subnet_ids" "all" {
   vpc_id = "${data.aws_vpc.default.id}"
 }
 
-resource "aws_ebs_volume" "volume" {
+/*resource "aws_ebs_volume" "volume" {
   availability_zone = "us-east-1a"
   snapshot_id = "${var.latest_snapshot}"
   size = 35
-}
+}*/
 
 module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
@@ -31,7 +31,7 @@ module "security_group" {
 }
 
 
-resource "aws_instance" "test" {
+/*resource "aws_instance" "test" {
   ami           = "${var.ami}"
   instance_type = "${var.instance_type}"
   availability_zone = "us-east-1a"
@@ -48,16 +48,17 @@ resource "aws_volume_attachment" "ebs_volume_attachment" {
   volume_id   = "${aws_ebs_volume.volume.id}"
   instance_id = "${aws_instance.test.id}"
   force_detach = true
-}
+} */
 
 resource "aws_db_instance" "default" {
-  allocated_storage    = 20
-  storage_type         = "gp2"
-  engine               = "mysql"
-  engine_version       = "8.0.13"
-  instance_class       = "db.t2.micro"
-  name                 = "newdb"
-  username             = ""
-  password             = ""
-  parameter_group_name = "default.mysql8.0"
+  allocated_storage    = "${var.db_allocated_storage}"
+  storage_type         = "${var.db_storage_type}"
+  engine               = "${var.db_engine}"
+  engine_version       = "${var.db_engine_version}"
+  instance_class       = "${var.db_instance_class}"
+  name                 = "${var.db_name}"
+  username             = "${var.db_username}"
+  password             = "${var.db_password}"
+  parameter_group_name = "${var.db_parameter_group_name}"
+	final_snapshot_identifier = true
 }
