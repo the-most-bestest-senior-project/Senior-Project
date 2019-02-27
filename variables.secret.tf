@@ -5,5 +5,14 @@ variable "aws_access_key" {
 
 variable "aws_secret_key" {
  description = "The AWS secret key."
- default     = ""
+ default     = "test"
+}
+
+variable "db_username" {
+	description = "Username for DB"
+	default  = ""
+}
+variable "db_password" {
+	description = "Password for DB"
+	default   = ""
 }
