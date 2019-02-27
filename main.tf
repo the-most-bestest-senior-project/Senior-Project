@@ -62,5 +62,5 @@ resource "aws_db_instance" "default" {
   parameter_group_name = "${var.db_parameter_group_name}"
 	skip_final_snapshot = true
 	final_snapshot_identifier = true
-	publicly_accessible = true;
+	publicly_accessible = true
 }
