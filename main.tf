@@ -50,6 +50,7 @@ resource "aws_volume_attachment" "ebs_volume_attachment" {
   force_detach = true
 } */
 
+# Create a database server
 resource "aws_db_instance" "default" {
   allocated_storage    = "${var.db_allocated_storage}"
   storage_type         = "${var.db_storage_type}"
@@ -63,4 +64,16 @@ resource "aws_db_instance" "default" {
 	skip_final_snapshot = true
 	final_snapshot_identifier = true
 	publicly_accessible = true
+
+  provisioner "local-exec" {
+    command = "mysql -u ${var.db_username} -p ${var.db_password} -h ${aws_db_instance.default.endpoint}"
+  }
+}
+
+# Configure the MySQL provider based on the outcome of creating the aws_db_instance
+# ??
+provider "mysql" {
+  endpoint = "${aws_db_instance.default.endpoint}"
+  username = "${aws_db_instance.default.username}"
+  password = "${aws_db_instance.default.password}"
 }
