@@ -1,15 +1,18 @@
-#!/bin/sh
+#!/usr/bin/sh
 
 DIR=""
+SNAP=""
 if [ $# -eq 0 ]
   then
-    DIR = "rds"
+    cd tf/rds
 else
     DIR=$1
+    SNAP=$2
+
+    cd tf/$DIR
 fi
 
 #Runs terraform scripts to setup rds and vpc networking
-cd tf/$DIR
 terraform init 
 terraform plan\
  -out out.terraform

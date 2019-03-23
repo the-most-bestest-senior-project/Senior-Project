@@ -16,7 +16,7 @@ except:
 
 cur.execute("USE `senior_design`;")
 cur.execute("""CREATE TABLE IF NOT EXISTS `senior_design`.`ebs_table` ( 
-  `user_ID` INT(11) NOT NULL, 
+  `user_ID` INT(20) NOT NULL, 
   `snapshot` VARCHAR(45) NULL DEFAULT NULL, 
   `snapshot_time` TIMESTAMP NOT NULL, 
   `AMI` VARCHAR(45) NULL DEFAULT NULL, 
@@ -28,7 +28,5 @@ cur.execute("""CREATE TABLE IF NOT EXISTS `senior_design`.`game_table` (
 
 #check 
 cur.execute("SHOW TABLES;")
-for row in cur.fetchall():
-    print(row[0])
 
 db.close()
