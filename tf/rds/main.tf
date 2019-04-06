@@ -1,23 +1,96 @@
+data "aws_vpc" "default" {
+  default = true
+}
+#
+data "aws_subnet_ids" "subnet" {
+  vpc_id = "${data.aws_vpc.default.id}"
+}
+
+
 provider "aws" {
   access_key = "${var.aws_access_key}"
   secret_key = "${var.aws_secret_key}"
   region     = "us-east-1"
 }
 
-data "aws_vpc" "default" {
-  default = true
+resource "aws_vpc" "main" {
+  cidr_block = "10.0.0.0/16"
+  tags = {
+	  Name = "main"
+  }
+  enable_dns_hostnames = "true"
 }
 
-data "aws_subnet_ids" "subnet" {
-  vpc_id = "${data.aws_vpc.default.id}"
+resource "aws_subnet" "mainsub1" {
+  vpc_id     = "${aws_vpc.main.id}"
+  cidr_block = "10.0.0.0/24"
+
+  availability_zone_id = "use1-az4"
+  tags = {
+    Name = "Main"
+  }
+}
+
+resource "aws_subnet" "mainsub2" {
+  vpc_id     = "${aws_vpc.main.id}"
+  cidr_block = "10.0.1.0/24"
+
+  availability_zone_id = "use1-az6"
+  tags = {
+    Name = "Main"
+  }
+}
+
+resource "aws_internet_gateway" "gw" {
+  vpc_id = "${aws_vpc.main.id}"
+
+  tags = {
+    Name = "main"
+  }
+}
+
+resource "aws_route_table" "r" {
+  vpc_id = "${aws_vpc.main.id}"
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = "${aws_internet_gateway.gw.id}"
+  }
+
+
+
+  tags = {
+    Name = "main"
+  }
+}
+
+resource "aws_route_table_association" "a" {
+  subnet_id      = "${aws_subnet.mainsub1.id}"
+  route_table_id = "${aws_route_table.r.id}"
+
+
+}
+
+resource "aws_route_table_association" "b" {
+  subnet_id      = "${aws_subnet.mainsub2.id}"
+  route_table_id = "${aws_route_table.r.id}"
+
+
 }
 
 resource "aws_security_group" "sg-rds" {
-  name = "test_sg_rds"
+  name = "main"
   vpc_id = "${data.aws_vpc.default.id}"
   ingress {
     from_port = 3306
     to_port = 3306
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0","10.0.0.0/16"]
+  }
+
+  egress {
+	from_port = 3306
+	to_port = 3306
     protocol = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
