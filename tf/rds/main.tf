@@ -24,7 +24,7 @@ resource "aws_vpc" "main" {
 
 resource "aws_subnet" "mainsub1" {
   vpc_id     = "${aws_vpc.main.id}"
-  cidr_block = "${var.az_sub1}"
+  cidr_block = "${var.cidr_sub1}"
 
   availability_zone_id = "use1-az4"
   tags = {
@@ -34,7 +34,7 @@ resource "aws_subnet" "mainsub1" {
 
 resource "aws_subnet" "mainsub2" {
   vpc_id     = "${aws_vpc.main.id}"
-  cidr_block = "${var.az_sub2}"
+  cidr_block = "${var.cidr_sub2}"
 
   availability_zone_id = "use1-az6"
   tags = {
