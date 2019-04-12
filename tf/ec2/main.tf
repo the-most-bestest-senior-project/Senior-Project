@@ -15,29 +15,44 @@ data "aws_subnet_ids" "subnet" {
 resource "aws_ebs_volume" "volume" {
   availability_zone = "${var.availability_zone}"
   snapshot_id = "${var.latest_snapshot}"
-  size = 50
+  size = 40
 }
 
-module "security_group" {
-  source  = "terraform-aws-modules/security-group/aws"
-
+resource "aws_security_group" "test_ec2_sg" {
   name        = "test_sg"
   description = "Opens all TCP, UDP and ICMP ports to use with gaming"
   vpc_id      = "${data.aws_vpc.default.id}"
 
-  ingress_cidr_blocks = ["0.0.0.0/0"]
-  ingress_rules       = ["all-tcp", "all-udp", "all-icmp"]
-  egress_rules        = ["all-all"]
+  ingress {
+    from_port = 0
+    to_port = 65535
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port = 0
+    to_port = 65535
+    protocol = "udp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 resource "aws_instance" "test" {
   ami           = "${var.ami}"
   instance_type = "${var.instance_type}"
   availability_zone = "${var.availability_zone}"
-  vpc_security_group_ids = [ "${module.security_group.this_security_group_id}" ]
+  vpc_security_group_ids = [ "${aws_security_group.test_ec2_sg.id}" ]
 
   tags {
     Name = "test",
     Description = "Made by tf"
   }
+}
+
+resource "null_resource" "ebs_setup" {
+    depends_on = ["aws_ebs_volume.volume", "aws_instance.test"]
+    provisioner "local-exec" {
+      command = "python ebs_setup.py ${aws_ebs_volume.volume.id}"
+    }
 }

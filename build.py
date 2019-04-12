@@ -34,7 +34,7 @@ def main():
         db = pymysql.connect(host=addr,
                        port=3306,
                        user=usr,      
-                       password="")
+                       password="rootrootroot") #figure this out
 
         snap=""
         cur = db.cursor()
@@ -43,9 +43,15 @@ def main():
         #insert_tuple = ("123", "123", datetime.datetime.now(), "idk")
         #cur.execute(sql_insert_query, insert_tuple)
 
-        #TODO: still need to check this stuff is working
-        cur.execute("SELECT * FROM `ebs_table` ORDER BY `snapshot_time` DESC LIMIT 1")
+        cur.execute("SELECT `snapshot` FROM `ebs_table` ORDER BY `snapshot_time` DESC LIMIT 1")
+        snap = cur.fetchone()
+        print(snap)
+        for row in cur:
+                print(row)
 
-        subprocess.call('setup.sh ec2 "%s' %snap, shell=True)
+        db.commit()
+        db.close()
+
+        subprocess.call('setup.sh ec2 "%s"' %snap, shell=True)
 
 main()

@@ -1,9 +1,9 @@
 variable "instance_type" {
-    default = "g2.2xlarge"
+    default = "t2.micro"
 }
 
 variable "ami" {
-    default = "ami-07f14189fe929c0e5"
+    default = "ami-00a20f508263efd30"
 }
 
 variable "region" {

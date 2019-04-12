@@ -16,11 +16,11 @@ except:
 
 cur.execute("USE `senior_design`;")
 cur.execute("""CREATE TABLE IF NOT EXISTS `senior_design`.`ebs_table` ( 
-  `user_ID` INT(20) NOT NULL, 
-  `snapshot` VARCHAR(45) NULL DEFAULT NULL, 
+  `user_ID` VARCHAR(45) NOT NULL, 
+  `snapshot` VARCHAR(45) NOT NULL, 
   `snapshot_time` TIMESTAMP NOT NULL, 
   `AMI` VARCHAR(45) NULL DEFAULT NULL, 
-  PRIMARY KEY (`user_ID`));""")
+  PRIMARY KEY (`snapshot`));""")
 cur.execute("""CREATE TABLE IF NOT EXISTS `senior_design`.`game_table` (
   `AMI` VARCHAR(45) NOT NULL,
   `game_title` VARCHAR(45) NOT NULL,
@@ -28,5 +28,8 @@ cur.execute("""CREATE TABLE IF NOT EXISTS `senior_design`.`game_table` (
 
 #check 
 cur.execute("SHOW TABLES;")
+for row in cur:
+  print(row)
 
+db.commit()
 db.close()
