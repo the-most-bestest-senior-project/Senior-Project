@@ -2,6 +2,7 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import *
+import subprocess
 
 # Create instance
 window = tk.Tk()
@@ -88,17 +89,27 @@ RDSActionCombo = ttk.Combobox(tab2,
 #RDSActionCombo.current(0)
 
 def callback():
-    print("Access Key: ", theAccessKey.get())
-    print("Secret Key: ", theSecretKey.get())
-    print("Instance Type: ", theInstanceType.get())
-    print("Game: ", theGame.get())
-    print("Game Action: ", theGameAction.get())
-    print("RDS Username: ", theRDSusername.get())
-    print("RDS Password: ", theRDSpassword.get())
-    print("RDS Action: ", theRDSaction.get())
+    ak = theAccessKey.get()
+    sk = theSecretKey.get()
+    it = theInstanceType.get()
+    g = theGame.get()
+    ga = theGameAction.get()
+    rdsu = theRDSusername.get()
+    rdsp = theRDSpassword.get()
+    rdsa = theRDSaction.get()
+    print("Access Key: ", ak)
+    print("Secret Key: ", sk)
+    print("Instance Type: ", it)
+    print("Game: ", g)
+    print("Game Action: ", ga)
+    print("RDS Username: ", rdsu)
+    print("RDS Password: ", rdsp)
+    print("RDS Action: ", rdsa)
+    os.system('./setup.sh ' % (rdsu, rdsp, ak, sk))
+    os.system('python build.py ' % (rdsp, ak, sk, it, g))
 
-b = Button(window, text="Go", command=callback)
-b.pack()
+
+b = Button(window, text="Go", command=callback).pack()
 
 #Calling Main() to start GUI
 window.mainloop()

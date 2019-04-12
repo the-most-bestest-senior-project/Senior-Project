@@ -2,7 +2,7 @@
 
 DIR=""
 SNAP=""
-if [ $# -eq 0 ]
+if [ $1 -neg 'ec2' ]
   then
     cd tf/rds
 else
@@ -13,7 +13,7 @@ else
 fi
 
 #Runs terraform scripts to setup rds and vpc networking
-terraform init 
+terraform init
 terraform plan\
  -out out.terraform
 terraform apply out.terraform
