@@ -5,22 +5,22 @@ import sys
 import datetime
 
 def main():
-        access_key=""
-        secret_key=""
+        access_key=sys.argv[2]
+        secret_key=sys.argv[3]
 
-        ec2 = boto3.client('ec2', 
+        ec2 = boto3.client('ec2',
                 aws_access_key_id=access_key,
                 aws_secret_access_key=secret_key,
                 region_name='us-east-1')
 
-        rds = boto3.client('rds', 
+        rds = boto3.client('rds',
                 aws_access_key_id=access_key,
                 aws_secret_access_key=secret_key,
                 region_name='us-east-1')
 
         addr=""
         usr=""
-        pwd=""
+        pwd=sys.argv[1]
 
         rds_instances = rds.describe_db_instances()
         for i in rds_instances['DBInstances']:
@@ -28,12 +28,12 @@ def main():
                 tags = rds.list_tags_for_resource(ResourceName=arn)['TagList']
                 tag = next(iter(filter(lambda tag: tag['Key'] == 'Name' and tag['Value'] == 'gaming_db', tags)), None)
                 if tag:
-                        addr = i.get('Endpoint').get('Address') 
+                        addr = i.get('Endpoint').get('Address')
                         usr = i.get('MasterUsername')
 
         db = pymysql.connect(host=addr,
                        port=3306,
-                       user=usr,      
+                       user=usr,
                        password="rootrootroot") #figure this out
 
         snap=""
