@@ -116,13 +116,9 @@ def callback():
     rdsu = theRDSusername.get()
     rdsp = theRDSpassword.get()
     rdsa = theRDSaction.get()
-    print("Access Key: ", ak)
-    print("Secret Key: ", sk)
-    print("RDS Username: ", rdsu)
-    print("RDS Password: ", rdsp)
-    print("RDS Action: ", rdsa)
     if(rdsa == 'Create'):
-        os.system('bash ./setup.sh "%s" "%s" "%s" "%s"' % (rdsu, rdsp, ak, sk))
+        print('bash ./setup2.sh %s %s %s %s' % (rdsu, rdsp, ak, sk))
+        os.system('bash ./setup2.sh %s %s %s %s' % (rdsu, rdsp, ak, sk))
 
 b = Button(tab2, text="Go", command=callback).grid(row=6, column=1)
 
