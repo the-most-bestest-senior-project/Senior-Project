@@ -4,14 +4,6 @@ provider "aws" {
   region     = "us-east-1"
 }
 
-data "aws_vpc" "default" {
-  default = true
-}
-
-data "aws_subnet_ids" "subnet" {
-  vpc_id = "${data.aws_vpc.default.id}"
-}
-
 resource "aws_ebs_volume" "volume" {
   availability_zone = "${var.availability_zone}"
   snapshot_id = "${var.latest_snapshot}"
@@ -21,7 +13,7 @@ resource "aws_ebs_volume" "volume" {
 resource "aws_security_group" "test_ec2_sg" {
   name        = "test_sg"
   description = "Opens all TCP, UDP and ICMP ports to use with gaming"
-  vpc_id      = "${data.aws_vpc.default.id}"
+  vpc_id      = "${var.vpc_id}"
 
   ingress {
     from_port = 0
@@ -43,11 +35,16 @@ resource "aws_instance" "test" {
   instance_type = "${var.instance_type}"
   availability_zone = "${var.availability_zone}"
   vpc_security_group_ids = [ "${aws_security_group.test_ec2_sg.id}" ]
-
+  subnet_id = "${var.subnet_id}"
   tags {
     Name = "test",
     Description = "Made by tf"
   }
+}
+
+resource "aws_eip" "eip" {
+  vpc = true
+  instance            = "${aws_instance.test.id}"
 }
 
 resource "null_resource" "ebs_setup" {

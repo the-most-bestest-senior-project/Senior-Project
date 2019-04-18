@@ -82,6 +82,11 @@ resource "aws_security_group" "sg-rds" {
   }
 }
 
+resource "aws_db_subnet_group" "subnet_group" {
+  name       = "tf-rds-subnets"
+  subnet_ids = ["${aws_subnet.mainsub1.id}", "${aws_subnet.mainsub2.id}"]
+}
+
 resource "aws_db_instance" "db" {
   allocated_storage    = "${var.db_allocated_storage}"
   storage_type         = "${var.db_storage_type}"
@@ -92,6 +97,7 @@ resource "aws_db_instance" "db" {
   username             = "${var.db_username}"
   password             = "${var.db_password}"
   parameter_group_name = "${var.db_parameter_group_name}"
+  db_subnet_group_name = "${aws_db_subnet_group.subnet_group.id}"
   skip_final_snapshot  = true
   publicly_accessible  = true
   vpc_security_group_ids = ["${aws_security_group.sg-rds.id}"]

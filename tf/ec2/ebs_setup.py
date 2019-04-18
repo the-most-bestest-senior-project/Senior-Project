@@ -8,7 +8,7 @@ ec2 = boto3.resource('ec2')
 for instance in ec2.instances.filter(
     Filters=[
         {'Name': "instance-state-name", 'Values': ["running"]},
-        {'Name': "image-id", 'Values': ["ami-00a20f508263efd30"]}]
+        {'Name': "image-id", 'Values': ["ami-0c9229763022bca45"]}]
 ):
     instance.stop()
 

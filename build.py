@@ -3,6 +3,7 @@ import subprocess
 import pymysql
 import sys
 import datetime
+import os
 
 def main():
         access_key=sys.argv[2]
@@ -12,7 +13,38 @@ def main():
                 aws_access_key_id=access_key,
                 aws_secret_access_key=secret_key,
                 region_name='us-east-1')
+                
+        ec2_r = boto3.resource('ec2',
+                aws_access_key_id=access_key,
+                aws_secret_access_key=secret_key,
+                region_name='us-east-1')
 
+        filters = [{'Name':'tag:Name', 'Value':'main'}]
+        
+        response = ec2.describe_vpcs(
+                Filters=[
+                        {
+                        'Name': 'tag:Name',
+                        'Values': [
+                                "main",
+                        ]
+                        }    
+                ]
+        )
+        vpc_id = ""
+        resp = response['Vpcs']
+        for i in resp:
+                for k, v in i.items():
+                        if k == "VpcId":
+                                vpc_id = v
+        cnt = 0
+        for vpc in ec2_r.vpcs.all():
+                if vpc.id == vpc_id:
+                        for subnet in vpc.subnets.all():
+                                if cnt == 0:
+                                        sub = subnet.id
+                                        break
+                                cnt+= 1
         rds = boto3.client('rds',
                 aws_access_key_id=access_key,
                 aws_secret_access_key=secret_key,
@@ -52,6 +84,7 @@ def main():
         db.commit()
         db.close()
 
-        subprocess.call('setup.sh ec2 "%s"' %snap, shell=True)
+        os.system("cd tf/rds && terraform init && terraform apply -var 'aws_access_key='%s -var 'aws_secret_key='%s -var 'latest_snapshot='%s -var 'vpc_id='%s -var 'subnet_id='%s -auto-approve" % (access_key, secret_key, snap, vpc_id, sub))
+        #subprocess.call('setup.sh ec2 "%s" "%s" "%s"' %(snap, vpc_id, sub), shell=True)
 
 main()

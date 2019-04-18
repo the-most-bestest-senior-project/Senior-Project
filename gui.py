@@ -55,7 +55,7 @@ ttk.Label(tab1, text = "Choose Game:").grid(row=3,padx=10,pady=10)
 theGame = tk.StringVar()
 GameCombo = ttk.Combobox(tab1,
                             values=[
-                                    "Snake",
+                                    "Hitman",
                                     "The Witcher 3: Wild Hunt"],
                             state="readonly",
                             textvariable=theGame).grid(row=3, column=1)
@@ -118,9 +118,7 @@ def callback():
     rdsp = theRDSpassword.get()
     rdsa = theRDSaction.get()
     if(rdsa == 'Create'):
-        subprocess.call('setup2.sh %s %s %s %s' % (rdsu, rdsp, ak, sk), shell=True)
-        #print('bash ./setup2.sh %s %s %s %s' % (rdsu, rdsp, ak, sk))
-        #os.system('bash ./setup2.sh %s %s %s %s' % (rdsu, rdsp, ak, sk))
+        os.system("cd tf/rds && terraform init && terraform apply -var 'aws_access_key='%s -var 'aws_secret_key='%s -var 'db_username='%s -var 'db_password='%s -auto-approve" % (ak, sk, rdsu, rdsp))
 
 b = Button(tab2, text="Go", command=callback).grid(row=6, column=1)
 
