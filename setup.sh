@@ -1,6 +1,5 @@
 #!/usr/bin/sh
-DIR=""
-SNAP=""
+
 DIR=$1
 SNAP=$2
 cd tf/$DIR

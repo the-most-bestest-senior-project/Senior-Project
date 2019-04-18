@@ -10,9 +10,9 @@ variable "aws_secret_key" {
 
 variable "db_username" {
 	description = "Username for DB"
-	default  = "rootrootroot"
+	default  = ""
 }
 variable "db_password" {
 	description = "Password for DB"
-	default   = "rootrootroot"
+	default   = ""
 }

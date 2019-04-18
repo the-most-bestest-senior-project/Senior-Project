@@ -34,7 +34,7 @@ def main():
         db = pymysql.connect(host=addr,
                        port=3306,
                        user=usr,
-                       password="rootrootroot") #figure this out
+                       password=pwd) #figure this out
 
         snap=""
         cur = db.cursor()

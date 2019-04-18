@@ -1,12 +1,3 @@
-data "aws_vpc" "default" {
-  default = true
-}
-#
-data "aws_subnet_ids" "subnet" {
-  vpc_id = "${data.aws_vpc.default.id}"
-}
-
-
 provider "aws" {
   access_key = "${var.aws_access_key}"
   secret_key = "${var.aws_secret_key}"
@@ -58,8 +49,6 @@ resource "aws_route_table" "r" {
     gateway_id = "${aws_internet_gateway.gw.id}"
   }
 
-
-
   tags = {
     Name = "main"
   }
@@ -68,20 +57,16 @@ resource "aws_route_table" "r" {
 resource "aws_route_table_association" "a" {
   subnet_id      = "${aws_subnet.mainsub1.id}"
   route_table_id = "${aws_route_table.r.id}"
-
-
 }
 
 resource "aws_route_table_association" "b" {
   subnet_id      = "${aws_subnet.mainsub2.id}"
   route_table_id = "${aws_route_table.r.id}"
-
-
 }
 
 resource "aws_security_group" "sg-rds" {
   name = "main"
-  vpc_id = "${data.aws_vpc.default.id}"
+  vpc_id = "${aws_vpc.main.id}"
   ingress {
     from_port = 3306
     to_port = 3306

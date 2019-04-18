@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import *
 import os
+import subprocess
 
 # Create instance
 window = tk.Tk()
@@ -117,8 +118,9 @@ def callback():
     rdsp = theRDSpassword.get()
     rdsa = theRDSaction.get()
     if(rdsa == 'Create'):
-        print('bash ./setup2.sh %s %s %s %s' % (rdsu, rdsp, ak, sk))
-        os.system('bash ./setup2.sh %s %s %s %s' % (rdsu, rdsp, ak, sk))
+        subprocess.call('setup2.sh %s %s %s %s' % (rdsu, rdsp, ak, sk), shell=True)
+        #print('bash ./setup2.sh %s %s %s %s' % (rdsu, rdsp, ak, sk))
+        #os.system('bash ./setup2.sh %s %s %s %s' % (rdsu, rdsp, ak, sk))
 
 b = Button(tab2, text="Go", command=callback).grid(row=6, column=1)
 

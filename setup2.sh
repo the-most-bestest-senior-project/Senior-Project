@@ -1,7 +1,7 @@
-#!/bin/sh
-alias proj="cd /tf/rds/"
+#!/usr/bin/sh
+
+cd tf/rds
 #Runs terraform scripts to setup rds and vpc networking
-terraform -version
 terraform init
 terraform plan\
 -var 'db_username='$2 \
