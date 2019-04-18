@@ -1,8 +1,6 @@
 #!/usr/bin/sh
 
-DIR=""
-SNAP=""
-if [ $# -eq 0 ]
+if [ $# -eq 0 ] #change this to check if first arg = ec2
   then
     cd tf/rds
     #Runs terraform scripts to setup rds and vpc networking
@@ -12,9 +10,6 @@ if [ $# -eq 0 ]
     terraform apply out.terraform
     rm out.terraform KEY
 else
-    DIR=$1
-    SNAP=$2
-
     cd tf/$DIR
     #Runs terraform scripts to setup ec2
     terraform init 

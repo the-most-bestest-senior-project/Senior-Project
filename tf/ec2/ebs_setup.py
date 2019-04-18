@@ -21,7 +21,6 @@ for instance in ec2.instances.filter(
 
         v = ec2.Volume(device.get('Ebs').get('VolumeId'))
 
-        print(v.state)
         while v.state != 'available':
             time.sleep(5)
             v.load()

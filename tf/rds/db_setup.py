@@ -26,10 +26,7 @@ cur.execute("""CREATE TABLE IF NOT EXISTS `senior_design`.`game_table` (
   `game_title` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`AMI`));""")
 
-#check 
-cur.execute("SHOW TABLES;")
-for row in cur:
-  print(row)
+#insert into game table initial game ami
 
 db.commit()
 db.close()

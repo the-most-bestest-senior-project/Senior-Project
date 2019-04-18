@@ -12,7 +12,7 @@ def get_aws_account_id(access_key, secret_key):
     user_arn = sts.get_caller_identity()["Arn"]
     return user_arn.split(":")[4]
 
-
+#TODO: take in secret key, access key, ami/game, db pwd
 access_key = ""
 secret_key = ""
 
@@ -61,20 +61,14 @@ cur = db.cursor()
 ts = time.time()
 timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
 
-print(timestamp)
-
-#TODO: fix date column, not inserting correctly
 cur.execute("USE `senior_design`;")
 sql_insert_query = "INSERT INTO `ebs_table`(`user_ID`, `snapshot`, `snapshot_time`, `AMI`) VALUES (%s,%s,%s,%s)"
 insert_tuple = (account_id, snapshot, timestamp, ami)
 cur.execute(sql_insert_query, insert_tuple)
 cur.execute("SELECT * FROM `ebs_table`;")
-for row in cur:
-    print(row)
 
 db.commit()
 db.close()
 
-#TODO: call terraform destroy on ec2
 subprocess.call('teardown.sh ec2', shell=True)
             

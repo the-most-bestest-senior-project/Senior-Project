@@ -39,19 +39,15 @@ def main():
         snap=""
         cur = db.cursor()
         cur.execute("USE `senior_design`;")
-        #sql_insert_query = "INSERT INTO `ebs_table`(`user_ID`, `snapshot`, `snapshot_time`, `AMI`) VALUES (%s,%s,%s,%s)"
-        #insert_tuple = ("123", "123", datetime.datetime.now(), "idk")
-        #cur.execute(sql_insert_query, insert_tuple)
 
         cur.execute("SELECT `snapshot` FROM `ebs_table` ORDER BY `snapshot_time` DESC LIMIT 1")
         snap = cur.fetchone()
-        print(snap)
-        for row in cur:
-                print(row)
 
         db.commit()
         db.close()
 
+        #TODO: add ami to setup, and add ami to feed into ebs
+        # add access/secret/size variables to call
         subprocess.call('setup.sh ec2 "%s"' %snap, shell=True)
 
 main()
